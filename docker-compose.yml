@@ -38,7 +38,8 @@ services:
     container_name: zipper-cli
     depends_on:
       - redis
-    entrypoint: ["python", "cli.py"]
+    entrypoint: ["zipper", ""]
     volumes:
       - .:/app
-      - ./zips:/app/zips
+      - /home/ifedayo/playbook/zip_data/input:/app/to_zip
+      - /home/ifedayo/playbook/zip_data/output:/app/zips
