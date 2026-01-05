@@ -1,0 +1,17 @@
+[project]
+name = "zipper-app"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "celery>=5.6.2",
+    "flower>=2.0.1",
+    "redis>=7.1.0",
+    "rich>=14.2.0",
+    "typer>=0.21.0",
+]
+
+[project.scripts]
+zipper = "zipper.cli:app"
+
