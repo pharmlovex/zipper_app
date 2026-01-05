@@ -16,8 +16,7 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/1
     volumes:
       - /home/ifedayo/playbook/zip_data/input:/app/to_zip
-      - /home/ifedayo/playbook/zip_data/output:/app/zips
-
+      - /home/ifedayo/playbook/zip_data/output:/app/zipped_outputs
   flower:
     image: ghcr.io/pharmlovex/zipper_app:latest
     container_name: zipper-flower
@@ -39,7 +38,7 @@ services:
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/1
-    command: zipper /app/to_zip
+    command: zipper /app/to_zip --output-dir /app/zipped_outputs
     volumes:
       - /home/ifedayo/playbook/zip_data/input:/app/to_zip
-      - /home/ifedayo/playbook/zip_data/output:/app/zips
+      - /home/ifedayo/playbook/zip_data/output:/app/zipped_outputs

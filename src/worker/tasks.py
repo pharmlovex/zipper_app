@@ -1,6 +1,7 @@
 from worker.celery_app import celery_app
 import zipfile
 import os
+from pathlib import Path
 
 @celery_app.task(bind=True)
 def zip_folder(self, folder_path: str, output_dir: str):
@@ -26,7 +27,7 @@ def zip_folder(self, folder_path: str, output_dir: str):
 
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
         for index, full_path in enumerate(all_files, start=1):
-            relative_path = os.path.relpath(full_path, start=folder_path)
+            relative_path = os.path.relpath(full_path, start=Path(folder_path).parent)
             zipf.write(full_path, arcname=relative_path)
             self.update_state(
                 state='PROGRESS', 
