@@ -17,4 +17,4 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 USER zipper
 
-CMD ["zipper"]
+CMD ["zipper", "--help"]
