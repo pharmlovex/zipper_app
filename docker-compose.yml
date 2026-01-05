@@ -7,7 +7,6 @@ services:
 
   worker:
     image: ghcr.io/pharmlovex/zipper_app:latest
-    container_name: zipper-worker
     command: celery -A src.worker.celery_app.celery_app worker --loglevel=info
     depends_on:
       - redis
@@ -15,8 +14,8 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/1
     volumes:
-      - /home/ifedayo/playbook/zip_data/input:/app/to_zip
-      - /home/ifedayo/playbook/zip_data/output:/app/zipped_outputs
+      - /prism_genomics/input/prism:/app/to_zip
+      - /prism_genomics/output:/app/zipped_outputs
   flower:
     image: ghcr.io/pharmlovex/zipper_app:latest
     container_name: zipper-flower
@@ -40,5 +39,5 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/1
     command: zipper /app/to_zip --output-dir /app/zipped_outputs
     volumes:
-      - /home/ifedayo/playbook/zip_data/input:/app/to_zip
-      - /home/ifedayo/playbook/zip_data/output:/app/zipped_outputs
+      - /prism_genomics/output:/app/zipped_outputs
+      - /prism_genomics/input/prism:/app/to_zip
