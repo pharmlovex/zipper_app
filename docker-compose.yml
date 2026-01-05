@@ -10,7 +10,7 @@ services:
   worker:
     build: .
     container_name: zipper-worker
-    command: celery -A celery_app.celery_app worker --loglevel=info
+    command: celery -A src.worker.celery_app.celery_app worker --loglevel=info
     depends_on:
       - redis
     environment:
@@ -19,6 +19,19 @@ services:
     volumes:
       - .:/app
       - ./zips:/app/zips
+
+  flower:
+    build: .
+    container_name: zipper-flower
+    command: celery -A src.worker.celery_app.celery_app flower --port=5555
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+    ports:
+      - "5555:5555"
+
 
   cli:
     build: .
