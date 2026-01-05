@@ -1,9 +1,11 @@
+import os
 from celery import Celery
 
 celery_app = Celery(
     'zipper_service',
-    broker='redis://localhost:6379/0',
-    backend='redis://localhost:6379/1'
+    broker=os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0'),
+    backend=os.getenv('CELERY_RESULT_BACKEND', 'redis://localhost:6379/1'),
+    include=['worker.tasks']
 )
 
 celery_app.conf.update(

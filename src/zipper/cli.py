@@ -49,7 +49,7 @@ def zip(
 
     for subfolder in subfolders:
         task = celery_app.send_task(
-            'tasks.zip_folder', 
+            'worker.tasks.zip_folder',
             args=[str(subfolder), str(output_dir)]
         )    
         table.add_row(str(subfolder.name), task.id, "Queued")

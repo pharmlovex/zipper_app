@@ -6,7 +6,7 @@ services:
       - "6379:6379"
 
   worker:
-    build: .
+    image: ghcr.io/pharmlovex/zipper_app:latest
     container_name: zipper-worker
     command: celery -A src.worker.celery_app.celery_app worker --loglevel=info
     depends_on:
@@ -15,11 +15,11 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/1
     volumes:
-      - .:/app
-      - ./zips:/app/zips
+      - /home/ifedayo/playbook/zip_data/input:/app/to_zip
+      - /home/ifedayo/playbook/zip_data/output:/app/zips
 
   flower:
-    build: .
+    image: ghcr.io/pharmlovex/zipper_app:latest
     container_name: zipper-flower
     command: celery -A src.worker.celery_app.celery_app flower --port=5555
     depends_on:
@@ -32,12 +32,14 @@ services:
 
 
   cli:
-    build: .
+    image: ghcr.io/pharmlovex/zipper_app:latest
     container_name: zipper-cli
     depends_on:
       - redis
-    entrypoint: ["zipper", ""]
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+    command: zipper /app/to_zip
     volumes:
-      - .:/app
       - /home/ifedayo/playbook/zip_data/input:/app/to_zip
       - /home/ifedayo/playbook/zip_data/output:/app/zips
